@@ -1,0 +1,9 @@
+
+
+/perov_ml
+perov_ml/
+inputs/
+outputs/
+/inputs
+/outputs
+*.csv
