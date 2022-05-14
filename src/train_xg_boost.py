@@ -52,7 +52,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
             clf.fit(X_train, Y_train,
                     eval_set=[(X_test, Y_test)],
                     eval_metric = "auc",
-                    verbose = 0)
+                    verbose = 1)
             Y_pred = clf.predict(X_test)
             print(classification_report(Y_test, Y_pred, labels=[x for x in range(6)]))
             clf_report = classification_report(Y_test, Y_pred, labels=[x for x in range(6)])
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     tar_col = "PCE_categorical"
     model_name = "xgb_boost_classfier"
     optimizer = "un_optim"
-    folds = 7
+    folds = 20
     # clf = TabNetClassifier()
     # y = use_df[tar_col]
     # x = use_df.drop([tar_col],axis=1)
