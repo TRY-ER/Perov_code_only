@@ -10,7 +10,7 @@ import joblib
 
 # space for hyper parameters declaration
 
-def make_save_cv_model(i,model_name,model,best_params,optim,output_path="../outputs/cross_validated_models"):
+def make_save_cv_model(i,model_name,model,best_params,optim,output_path="../deposition/cross_validated_models"):
 
     ''' This function saves cross validation model in the corresponding directory ( if the path does not exist it creates the path for it'''
 
@@ -56,9 +56,9 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
             Y_pred = clf.predict(X_test)
             print(classification_report(Y_test, Y_pred, labels=[x for x in range(6)]))
             clf_report = classification_report(Y_test, Y_pred, labels=[x for x in range(6)])
-            joblib.dump(clf_report,f"../outputs/classification_report/comp/{i}_{model_name}_classification_report.z")
-            with open(f"../outputs/classification_report/{model_name}_{i}_classification_report.txt","w+") as file:file.write(clf_report)
-            print(f"Saved classification_report at : outputs/classification_report/{model_name}_{i}_classification_report.txt")
+            joblib.dump(clf_report,f"../deposition/classification_report/comp/{i}_{model_name}_classification_report.z")
+            with open(f"../deposition/classification_report/{model_name}_{i}_classification_report.txt","w+") as file:file.write(clf_report)
+            print(f"Saved classification_report at : deposition/classification_report/{model_name}_{i}_classification_report.txt")
             acc = accuracy_score(Y_pred, Y_test)
             return acc
 
