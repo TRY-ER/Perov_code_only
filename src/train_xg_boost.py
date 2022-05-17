@@ -37,9 +37,9 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
     for i, (train_index, test_index) in enumerate(skf.split(x,y)):   
         def objective(trial):
             clf = XGBClassifier(n_estimators=trial.suggest_categorical("xgb_est",[100,200,300,400]),
-                                learning_rate=trial.suggest_categorical("xgb_lr",[0.1,0.01,0.001,3e-4]),
+                                learning_rate=trial.suggest_categorical("xgb_lr",[0.1,0.01,0.001]),
                                 booster = trial.suggest_categorical("xgb_booster",["gbtree","gblinear","dart"]),
-                                tree_method = trial.suggest_categorical("xgb_tree", ["exact","approx","hist","gpu_hist"]),
+                                tree_method = "gpu_hist",
                                 predictor = "cpu_predictor")
             # print(f" train_index :: {train_index}")
             # print(f" test_index :: {test_index}")
@@ -64,13 +64,12 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
 
         print(f"Starting optimization for fold : [{i}/{k_folds}]")
         study = opt.create_study(direction='maximize')
-        study.optimize(objective, n_trials=50)
+        study.optimize(objective, n_trials=20)
         best_params = study.best_params
         print(f" Best params for fold : [{i}/{k_folds}]")
         print(best_params)
-        joblib.dump(best_params,f"../outputs/{model_name}/best_params/comp/fold_{i}_best_params.z")
-        with open(f"../outputs/{model_name}/best_params/fold_{i}_best_params.txt", "w+") as file:file.write(best_params)
-        print(f"Saved best_params at : outputs/{model_name}/best_params/fold_{i}_best_params.txt")
+        joblib.dump(best_params,f"../deposition/best_params/comp/{model_name}_fold_{i}_best_params.z")
+        with open(f"../outputs/best_params/{model_name}_fold_{i}_best_params.txt", "w+") as file:file.write(best_params)
         clf_model = XGBClassifier(best_params)
         try:
             print("[++] Saving the model and parameters in corresponding directories")
@@ -87,16 +86,7 @@ if __name__ == '__main__':
     tar_col = "PCE_categorical"
     model_name = "xgb_boost_classfier"
     optimizer = "un_optim"
-    folds = 20
-    # clf = TabNetClassifier()
-    # y = use_df[tar_col]
-    # x = use_df.drop([tar_col],axis=1)
-    # X_train, X_test, Y_train, Y_test = train_test_split(x,y,test_size=0.2)
-    # clf.fit(X_train,Y_train)
-    # y_pred = clf.predict(X_test)
-    # accuracy_score = accuracy_score(y_pred, Y_test)
-    # print(accuracy_score) 
-    # print("[++] Starting the training process ...")
+    folds = 10
     train(model_name=model_name,
         sc_df=use_df,
         tar_col=tar_col,
