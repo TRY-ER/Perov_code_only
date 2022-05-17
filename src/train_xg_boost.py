@@ -36,7 +36,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
     model_name = model_name 
     for i, (train_index, test_index) in enumerate(skf.split(x,y)):   
         def objective(trial):
-            clf = XGBClassifier(n_estimators=trial.suggest_categorical("xgb_est",[100,200,300,400]),
+            clf = XGBClassifier(n_estimators=trial.suggest_categorical("xgb_est",[100,200,300,400,500]),
                                 learning_rate=trial.suggest_categorical("xgb_lr",[0.1,0.01,0.001]),
                                 booster = trial.suggest_categorical("xgb_booster",["gbtree","gblinear","dart"]),
                                 tree_method = "gpu_hist",
@@ -64,12 +64,12 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
 
         print(f"Starting optimization for fold : [{i}/{k_folds}]")
         study = opt.create_study(direction='maximize')
-        study.optimize(objective, n_trials=20)
+        study.optimize(objective, n_trials=15)
         best_params = study.best_params
         print(f" Best params for fold : [{i}/{k_folds}]")
         print(best_params)
         joblib.dump(best_params,f"../deposition/best_params/comp/{model_name}_fold_{i}_best_params.z")
-        with open(f"../outputs/best_params/{model_name}_fold_{i}_best_params.txt", "w+") as file:file.write(best_params)
+        with open(f"../deposition/best_params/{model_name}_fold_{i}_best_params.txt", "w+") as file:file.write(best_params)
         clf_model = XGBClassifier(best_params)
         try:
             print("[++] Saving the model and parameters in corresponding directories")
