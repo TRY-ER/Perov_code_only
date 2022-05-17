@@ -69,7 +69,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
         print(f" Best params for fold : [{i}/{k_folds}]")
         print(best_params)
         joblib.dump(best_params,f"../deposition/best_params/comp/{model_name}_fold_{i}_best_params.z")
-        with open(f"../deposition/best_params/{model_name}_fold_{i}_best_params.txt", "w+") as file:file.write(best_params)
+        with open(f"../deposition/best_params/{model_name}_fold_{i}_best_params.txt", "w+") as file:file.write(str(best_params))
         clf_model = XGBClassifier(best_params)
         try:
             print("[++] Saving the model and parameters in corresponding directories")
