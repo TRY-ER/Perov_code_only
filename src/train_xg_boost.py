@@ -34,6 +34,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
     # k_fold constructing the cross-validation framework
     skf = StratifiedKFold(n_splits=k_folds,shuffle=True, random_state=123 )
     model_name = model_name 
+    acc_scores = []
     for i, (train_index, test_index) in enumerate(skf.split(x,y)):   
         def objective(trial):
             clf = XGBClassifier(n_estimators=trial.suggest_categorical("xgb_est",[100,200,300,400,500]),
@@ -70,12 +71,23 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
         joblib.dump(best_params,f"../outputs/{model_name}/best_params/comp/fold_{i}_best_params.z")
         with open(f"../outputs/{model_name}/best_params/fold_{i}_best_params.txt", "w+") as file:file.write(str(best_params))
         print(f"Saved best_params at : outputs/{model_name}/best_params/fold_{i}_best_params.txt")
+        X_train,X_test = x.iloc[train_index,:], x.iloc[test_index,:]
+        # print(X_train.shape, X_test.shape)
+        X_train, X_test = X_train.to_numpy(dtype=np.float64), X_test.to_numpy(dtype=np.float64)
+        Y_train, Y_test = y.iloc[train_index], y.iloc[test_index]
+        Y_train, Y_test = Y_train.to_numpy(dtype=np.float64), Y_test.to_numpy(dtype=np.float64)
         clf_model =XGBClassifier(best_params)
+        clf_model.fit(X_train,Y_train)
+        Y_pred = clf_model.predict(X_test)
+        accuracy = accuracy_score(Y_pred, Y_test)
+        acc_scores.append(accuracy)
+        with open(f"./outputs/{model_name}/{model_name}_{i}_accuracy_score.txt","w+") as file:file.write(f" accuracy :: {str(accuracy)}")
         try:
             print("[++] Saving the model and parameters in corresponding directories")
             make_save_cv_model(i,model_name,clf_model,best_params,optim=optim)
         except:
             print("[-] Failed to save the model")
+    print(f" Average accuracy achieved : {np.mean(acc_scores)}")
 
 
 
