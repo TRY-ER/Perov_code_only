@@ -1,0 +1,1 @@
+{'C': 3, 'svc_kernel': 'rbf', 'svc_decision_function_shape': 'ovo'}

@@ -6,6 +6,7 @@ from sklearn.metrics import accuracy_score,classification_report
 import optuna as opt
 import os
 import joblib
+from datetime import datetime
 
 
 # space for hyper parameters declaration
@@ -34,11 +35,12 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
     # k_fold constructing the cross-validation framework
     skf = StratifiedKFold(n_splits=k_folds,shuffle=True, random_state=123 )
     model_name = model_name 
-    for i, (train_index, test_index) in enumerate(skf.split(x,y)):   
+    for i, (train_index, test_index) in enumerate(skf.split(x,y)):  
+        print(f" Start time of fold {i} : {datetime.now()}") 
         def objective(trial):
             clf = SVC(C=trial.suggest_categorical("C",[1,2,3]),
-                                kernel=trial.suggest_categorical("svc_kernel",["linear", "poly", "rbf", "sigmoid", "precomputed"]),
-                                gamma = trial.suggest_categorical("svc_gamma",["scale", "auto"]),
+                                kernel=trial.suggest_categorical("svc_kernel",["linear", "poly", "rbf", "sigmoid"]),
+                                gamma = "auto",
                                 decision_function_shape=trial.suggest_categorical("svc_decision_function_shape",["ovo","ovr"]),
                                 verbose = 1,
                                 random_state = 123,
@@ -75,6 +77,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
             make_save_cv_model(i,model_name,clf_model,best_params,optim=optim)
         except:
             print("[-] Failed to save the model")
+        print(f" End time of fold {i} : {datetime.now()}")
 
 
 
@@ -83,7 +86,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
 if __name__ == '__main__':
     use_df = pd.read_csv("../outputs/data/trainable_scaled_balanced.csv")
     tar_col = "PCE_categorical"
-    model_name = "xgb_boost_classfier"
+    model_name = "svc_classifier"
     optimizer = "un_optim"
     folds = 10
     train(model_name=model_name,

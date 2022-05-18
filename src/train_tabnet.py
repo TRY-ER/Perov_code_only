@@ -16,15 +16,15 @@ def make_save_cv_model(i,model_name,model,best_params,optim,output_path="../outp
     ''' This function saves cross validation model in the corresponding directory ( if the path does not exist it creates the path for it'''
 
 
-    if os.path.exists(os.path.join(f"{output_path}/{i}_{model_name}_{optim}")):
-        joblib.dump(model, os.path.join(f"{output_path}/{i}_{model_name}_{optim}/{i}_model.z"))
-        with open(os.path.join(f"{output_path}/{i}_{model_name}_{optim}/model_params.txt"),"w+") as file:
-            file.write(best_params)
+    if os.path.exists(os.path.join(output_path,f"{i}_{model_name}_{optim}")):
+        joblib.dump(model, os.path.join(output_path,f"{i}_{model_name}_{optim}/{i}_model.z"))
+        with open(os.path.join(output_path,f"{i}_{model_name}_{optim}/model_params.txt"),"w+") as file:
+            file.write(str(best_params))
     else:
-        os.mkdir(os.path.join(f"{output_path}/{i}_{model_name}_{optim}"))
-        joblib.dump(model, os.path.join(f"{output_path}/{i}_{model_name}_{optim}/{i}_model.z"))
-        with open(os.path.join(f"{output_path}/{i}_{model_name}_{optim}/model_params.txt"),"w+") as file:
-            file.write(best_params)
+        os.mkdir(os.path.join(output_path,f"{i}_{model_name}_{optim}"))
+        joblib.dump(model, os.path.join(output_path,f"{i}_{model_name}_{optim}/{i}_model.z"))
+        with open(os.path.join(output_path,f"{i}_{model_name}_{optim}/model_params.txt"),"w+") as file:
+            file.write(str(best_params))
 
 def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
 
@@ -78,7 +78,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
         print(f" Best params for fold : [{i}/{k_folds}]")
         print(best_params)
         joblib.dump(best_params,f"../outputs/{model_name}/best_params/comp/fold_{i}_best_params.z")
-        with open(f"../outputs/{model_name}/best_params/fold_{i}_best_params.txt", "w+") as file:file.write(best_params)
+        with open(f"../outputs/{model_name}/best_params/fold_{i}_best_params.txt", "w+") as file:file.write(str(best_params))
         print(f"Saved best_params at : outputs/{model_name}/best_params/fold_{i}_best_params.txt")
         clf_model = TabNetClassifier(best_params)
         try:
