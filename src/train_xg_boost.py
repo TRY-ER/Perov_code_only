@@ -76,7 +76,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
         X_train, X_test = X_train.to_numpy(dtype=np.float64), X_test.to_numpy(dtype=np.float64)
         Y_train, Y_test = y.iloc[train_index], y.iloc[test_index]
         Y_train, Y_test = Y_train.to_numpy(dtype=np.float64), Y_test.to_numpy(dtype=np.float64)
-        clf_model =XGBClassifier(best_params)
+        clf_model =XGBClassifier(**best_params)
         clf_model.fit(X_train,Y_train)
         Y_pred = clf_model.predict(X_test)
         accuracy = accuracy_score(Y_pred, Y_test)

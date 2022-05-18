@@ -46,7 +46,6 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
                                     n_shared = trial.suggest_int("n_shared",1,5),
                                     momentum = trial.suggest_float("momentum", 0.01, 0.4),
                                     optimizer_fn = torch.optim.Adam,
-                                    optimizer_params = dict(lr=trial.suggest_float("lr",1e-4,1e-3)),
                                     # scheduler_fn = torch.optim.lr_scheduler,
                                     # scheduler_params = {"gamma" :trial.suggest_float("sch-gamma", 0.5, 0.95), "step_size": trial.suggest_int("sch_step_size", 10, 20, 2)},
                                     verbose = verbose,
@@ -86,7 +85,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
         X_train, X_test = X_train.to_numpy(dtype=np.float64), X_test.to_numpy(dtype=np.float64)
         Y_train, Y_test = y.iloc[train_index], y.iloc[test_index]
         Y_train, Y_test = Y_train.to_numpy(dtype=np.float64), Y_test.to_numpy(dtype=np.float64)
-        clf_model = TabNetClassifier(best_params)
+        clf_model = TabNetClassifier(**study.best_params)
         clf_model.fit(X_train,Y_train)
         Y_pred = clf_model.predict(X_test)
         accuracy = accuracy_score(Y_pred, Y_test)
