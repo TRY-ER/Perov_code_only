@@ -16,3 +16,12 @@ def save_k_fold(df,k_folds, tarcol,save=True,save_path="./outputs/fold_vals/"):
     if save:
         joblib.dump(fold_dict,f"{save_path}fold_data.z")
         print(f"saved the fold_data at {save_path}fold_data.z")
+
+
+if __name__ == "__main__":
+    df = pd.read_csv("../outputs/data/trainable_scaled_balanced.csv")
+    k_folds = 10
+    tarcol = "PCE_categorical"
+    print("Starting generating folds...")
+    save_k_fold(df=df,k_folds=k_folds,tarcol=tarcol)
+    print("Generating and saved folds...")
