@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import StratifiedKFold
 import joblib
 
-def save_k_fold(df,k_folds, tarcol,save=True,save_path="./outputs/fold_vals/"):
+def save_k_fold(df,k_folds, tarcol,save=True,save_path="../outputs/fold_vals/"):
     y = df[tarcol]
     x = df.drop([tarcol],axis=1)
     # k_fold constructing the cross-validation framework
