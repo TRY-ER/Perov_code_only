@@ -1,0 +1,1 @@
+{'n_d': 54, 'n_a': 40, 'n_steps': 3, 'gamma': 1.162176142189209, 'n_independent': 2, 'n_shared': 5, 'momentum': 0.16318048144517294}
