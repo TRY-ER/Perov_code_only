@@ -29,8 +29,8 @@ trans_df.to_csv("../outputs/data/trainable_encoded.csv",index=False)
 Y = trans_df[tar_col]
 X = trans_df.drop([tar_col],axis=1)
 scl = StandardScaler()
-joblib.dump(scl,"../outputs/scaler/standard_scaler.z")
 X_trans = scl.fit_transform(X)
+joblib.dump(scl,"../outputs/scaler/standard_scaler.z")
 
 trainable_df = pd.DataFrame(X_trans, columns=X.columns)
 trainable_df[tar_col] = Y
