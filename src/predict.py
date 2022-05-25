@@ -14,12 +14,13 @@ def take_input(data):
         while True or value != "q":
             print("________________________________________________________________________________________________________________________________")
             print("Available options for the column are:: ____")
-            print(f"{data[col]['uval']}")
+            print(f"{data[col]['u_val']}")
             value = input(f"Enter value for {col}::>>>")
             print("________________________________________________________________________________________________________________________________")
-            if value in data[col]['uval']:
-                export_df[col] = value
-                break
+            if data[col]["type"] == "categorical":
+                if value in data[col]['u_val']:  ## This comditional approach is invalid if the column is not a numeric type 
+                    export_df[col] = value     ## This if loop is only designed for categorial columns
+                    break
     return pd.DataFrame(export_df, columns=data.keys())
 
 def custom_preprocessor(data):
@@ -58,7 +59,7 @@ def custom_predictor(fold, data, target):
 
 if __name__ == "__main__":
     #defining parameters for iteration
-    n_folds = 10
+    n_folds = 6
     cust_model_name = "tabnet_adam"
     data = joblib.load("../deposition/col_data_pred.z")
     target = "PCE_categorical"
