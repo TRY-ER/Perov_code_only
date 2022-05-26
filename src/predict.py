@@ -18,9 +18,11 @@ def take_input(data):
             value = input(f"Enter value for {col}::>>>")
             print("________________________________________________________________________________________________________________________________")
             if data[col]["type"] == "categorical":
-                if value in data[col]['u_val']:  ## This comditional approach is invalid if the column is not a numeric type 
-                    export_df[col] = value     ## This if loop is only designed for categorial columns
+                if value in data[col]['u_val']:  
+                    export_df[col] = value     
                     break
+                else:
+                    print("The value is not matching with the unique values of the column.<< Enter again")
             else: 
                 export_df[col] = value
                 break
