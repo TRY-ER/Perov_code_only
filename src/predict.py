@@ -21,6 +21,9 @@ def take_input(data):
                 if value in data[col]['u_val']:  ## This comditional approach is invalid if the column is not a numeric type 
                     export_df[col] = value     ## This if loop is only designed for categorial columns
                     break
+            else: 
+                export_df[col] = value
+                break
     return pd.DataFrame(export_df, columns=data.keys())
 
 def custom_preprocessor(data):
