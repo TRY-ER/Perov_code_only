@@ -3,15 +3,18 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 import joblib
 
 
-main_df = pd.read_csv("../inputs/smote_main_reversed_revised_main.csv")
+main_df = pd.read_csv("../inputs/smote_main_reversed_reedited.csv")
 col_data = joblib.load("../inputs/columns_encoded/syn_data.z")
 
 
 #we have to eliminate those duplicate values from the dataset by excluding space values either from starting or ending of the string (for categorical sampeles only) 
 
 def elem_space(word):
-    if word[0] == " ": word = word[1:]
-    if word[-1] == " ": word = word[:-1:]
+    ''' This function reduces all the space occupied values to the individual values'''
+    try:
+        if word[0] == " ": word = word[1:]
+        if word[-1] == " ": word = word[:-1:]
+    except: ...
     return word
 
 for col in main_df.columns:
@@ -20,6 +23,8 @@ for col in main_df.columns:
         indiv_val = elem_space(value)
         new_val.append(indiv_val)
     main_df[col] = new_val
+
+main_df.to_csv("../outputs/data/space_preprocessed_main.csv",index=False)
 
 cat_cols = col_data["categorical"]
 tar_col = "PCE_categorical"
