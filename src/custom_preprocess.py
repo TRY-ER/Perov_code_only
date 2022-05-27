@@ -7,6 +7,20 @@ main_df = pd.read_csv("../inputs/smote_main_reversed_revised_main.csv")
 col_data = joblib.load("../inputs/columns_encoded/syn_data.z")
 
 
+#we have to eliminate those duplicate values from the dataset by excluding space values either from starting or ending of the string (for categorical sampeles only) 
+
+def elem_space(word):
+    if word[0] == " ": word = word[1:]
+    if word[-1] == " ": word = word[:-1:]
+    return word
+
+for col in main_df.columns:
+    new_val = []
+    for value in main_df[col].values:
+        indiv_val = elem_space(value)
+        new_val.append(indiv_val)
+    main_df[col] = new_val
+
 cat_cols = col_data["categorical"]
 tar_col = "PCE_categorical"
 
