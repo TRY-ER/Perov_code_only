@@ -1,0 +1,1 @@
+# this scripts will depoloy the ml model with lite environment on browser with local server
