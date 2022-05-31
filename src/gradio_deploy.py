@@ -724,12 +724,17 @@ def predict(Cell_area_measured_numeric,
         model = joblib.load(f"../divided_trained_models/tabnet_adam/models_main/fold_{fold}/{fold}_model.z")
         result = model.predict(scaled_df)
         pred_list.append(result)
-    main_result = st.mode(pred_list)
+    print(pred_list)
+    main_result = list(st.mode(pred_list))[0]
+    print(main_result)
     tar_lbl = joblib.load("../outputs/smote_label_enc/PCE_categorical.z")
-    result_main = tar_lbl.inverse_transform([int(main_result)])
+    result_main = tar_lbl.inverse_transform([int(*main_result)])
     return str(*result_main)
 
 
-app = gr.Interface(fn = predict,
-                   inputs= input_list,
-                   outputs = "text").launch()
+print(predict(0.0004, 'nip', 'SLG', 'FTO', 'None', 'None', 'None', 'TiO2-c', 'TiO2-mp', 'None', 'None', 'None', 'None', 'None', 'Spray-pyrolys', 'Spin-coating', 'None', 'None', 'None', 'None', 'None', 'Cs', 'None', 'None', 'None', 0.005, 0.0, 0.0, 0.0, 'Sn', 'None', 'None', 'None', 0.0, 0.0, 0.0, 0.0, 'I', 'None', 'None', 'None', -4.44e-16, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'Space-limited inverse temperature crystallization', 'Ultrasonic spray', 'None', 'None', 'None', 'None', 'Liquid', 'None', 'None', 'None', 'None', 'None', 'N2', 'None', 'None', 'None', 'None', 'None', 'DMSO', 'None', 'None', 'None', 'None', 7.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -3.55e-15, 0.0, 'Selenium', 'None', 'None', 'Li(CF3SO2)2N', 'TBP', 'None', 'None', 'None', 'Spin-coating', 'None', 'None', 'None', 'None', 'None', 'Au', 'None', 'None', 'None', 'None', 0.5, 0.0, 0.0, 0.0, 0.0, 'Evaporation', 'None', 'None', 'None', 'None', 0.0))
+
+
+# app = gr.Interface(fn = predict,
+#                    inputs= input_list,
+#                    outputs = "text").launch()
