@@ -4,6 +4,10 @@ import gradio as gr
 import joblib
 import numpy as np
 import pandas as pd
+from scipy import stats as st
+
+# this parameter defines the number of folds available in the divided_trained_models directory
+fold_limit = 1
 
 col_data = joblib.load("../deposition/col_data_pred.z")
 
@@ -707,7 +711,7 @@ def predict(Cell_area_measured_numeric,
         Encapsulation_bool = lbl_enc.transform([Encapsulation_bool])
         main_vals.append(*Encapsulation_bool)
     except:main_vals.append(Encapsulation_bool)
-    print(main_vals)
+    # print(main_vals)
     main_vals = np.array(main_vals)
     temp_df  = {}
     for col, value in zip(use_col,main_vals):
@@ -715,11 +719,14 @@ def predict(Cell_area_measured_numeric,
     temp_df = pd.DataFrame([temp_df])
     scaler = joblib.load("../outputs/scaler/standard_scaler.z")
     scaled_df = scaler.transform(temp_df)
-    model = joblib.load("../divided_trained_models/tabnet_adam/models_main/fold_0/0_model.z")
-    result = model.predict(scaled_df)
-    print(result)
+    pred_list = []
+    for fold in range(fold_limit):
+        model = joblib.load(f"../divided_trained_models/tabnet_adam/models_main/fold_{fold}/{fold}_model.z")
+        result = model.predict(scaled_df)
+        pred_list.append(result)
+    main_result = st.mode(pred_list)
     tar_lbl = joblib.load("../outputs/smote_label_enc/PCE_categorical.z")
-    result_main = tar_lbl.inverse_transform([int(result)])
+    result_main = tar_lbl.inverse_transform([int(main_result)])
     return str(*result_main)
 
 
