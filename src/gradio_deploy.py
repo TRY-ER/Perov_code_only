@@ -5,9 +5,9 @@ import joblib
 import numpy as np
 import pandas as pd
 from scipy import stats as st
+import os 
 
 # this parameter defines the number of folds available in the divided_trained_models directory
-fold_limit = 1
 
 col_data = joblib.load("../deposition/col_data_pred.z")
 
@@ -20,6 +20,7 @@ for col in col_data.keys():
         use_col.append(col)
         if col_data[col]["type"] == "categorical":
             input_list.append(gr.Dropdown(choices=col_data[col]["u_val"].tolist(),
+                                          value = col_data[col]["max"],
                                           label = col))
         elif col_data[col]["type"] == "numeric":
             input_list.append(gr.Number(value=col_data[col]["min"],
@@ -720,10 +721,11 @@ def predict(Cell_area_measured_numeric,
     scaler = joblib.load("../outputs/scaler/standard_scaler.z")
     scaled_df = scaler.transform(temp_df)
     pred_list = []
-    for fold in range(fold_limit):
+    for fold in range(len(os.listdir("../divided_trained_models/tabnet_adam/models_main"))):
         model = joblib.load(f"../divided_trained_models/tabnet_adam/models_main/fold_{fold}/{fold}_model.z")
         result = model.predict(scaled_df)
         pred_list.append(result)
+    print(pred_list)
     main_result = list(st.mode(pred_list))[0]
     tar_lbl = joblib.load("../outputs/smote_label_enc/PCE_categorical.z")
     result_main = tar_lbl.inverse_transform([int(*main_result)])
@@ -735,7 +737,7 @@ def predict(Cell_area_measured_numeric,
         if res == str(*result_main):
             desc_val = match
 
-    return f"{str(*result_main)} >> [The value is between {desc_val}]"
+    return f"{str(*result_main)}      >>     [The value is between {desc_val}]"
 
 
 # print(predict(0.0004, 'nip', 'SLG', 'FTO', 'None', 'None', 'None', 'TiO2-c', 'TiO2-mp', 'None', 'None', 'None', 'None', 'None', 'Spray-pyrolys', 'Spin-coating', 'None', 'None', 'None', 'None', 'None', 'Cs', 'None', 'None', 'None', 0.005, 0.0, 0.0, 0.0, 'Sn', 'None', 'None', 'None', 0.0, 0.0, 0.0, 0.0, 'I', 'None', 'None', 'None', -4.44e-16, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'Space-limited inverse temperature crystallization', 'Ultrasonic spray', 'None', 'None', 'None', 'None', 'Liquid', 'None', 'None', 'None', 'None', 'None', 'N2', 'None', 'None', 'None', 'None', 'None', 'DMSO', 'None', 'None', 'None', 'None', 7.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -3.55e-15, 0.0, 'Selenium', 'None', 'None', 'Li(CF3SO2)2N', 'TBP', 'None', 'None', 'None', 'Spin-coating', 'None', 'None', 'None', 'None', 'None', 'Au', 'None', 'None', 'None', 'None', 0.5, 0.0, 0.0, 0.0, 0.0, 'Evaporation', 'None', 'None', 'None', 'None', 0.0))
