@@ -96,7 +96,7 @@ def train(model_name,sc_df,tar_col,optim,k_folds=10,tar_cols="",verbose=1):
 if __name__ == '__main__':
     use_df = pd.read_csv("../outputs/data/trainable_scaled_balanced.csv")
     tar_col = "PCE_categorical"
-    model_name = "xgb_classifier"
+    model_name = "xg_boost"
     optimizer = "Adam"
     folds = 20
     # clf = TabNetClassifier()
