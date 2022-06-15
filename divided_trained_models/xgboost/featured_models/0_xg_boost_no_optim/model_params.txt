@@ -1,1 +1,1 @@
-{'xgb_est': 500, 'xgb_lr': 0.1, 'xgb_booster': 'gbtree'}
+{'xgb_est': 300, 'xgb_lr': 0.1, 'xgb_booster': 'dart'}
