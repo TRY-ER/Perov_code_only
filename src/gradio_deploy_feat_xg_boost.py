@@ -485,11 +485,11 @@ def predict(Cell_area_measured_numeric,
     for col, value in zip(use_col,main_vals):
         temp_df[col] = value
     temp_df = pd.DataFrame([temp_df])
-    scaler = joblib.load("../outputs/scaler/standard_scaler.z")
+    scaler = joblib.load("../outputs/scaler/feat_standard_scaler.z")
     scaled_df = scaler.transform(temp_df)
     pred_list = []
-    for fold in range(len(os.listdir("../divided_trained_models/xg_boost/featured_models"))):
-        model = joblib.load(f"../divided_trained_models/xg_boost/featured_models/{fold}_xg_boost_no_optim/{fold}_model.z")
+    for fold in range(len(os.listdir("../divided_trained_models/xgboost/featured_models"))):
+        model = joblib.load(f"../divided_trained_models/xgboost/featured_models/{fold}_xg_boost_no_optim/{fold}_model.z")
         result = model.predict(scaled_df)
         pred_list.append(result)
     print(pred_list)
