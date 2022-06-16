@@ -1,0 +1,1 @@
+{'xgb_est': 400, 'xgb_lr': 0.1, 'xgb_booster': 'gbtree'}
