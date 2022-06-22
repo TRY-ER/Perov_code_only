@@ -5,6 +5,7 @@ import joblib
 
 main_df = pd.read_csv("../inputs/smote_main_reversed_reedited.csv")
 col_data = joblib.load("../inputs/columns_encoded/syn_data.z")
+col_data_dict = joblib.load("../deposition/col_data_pred.z")
 
 
 #we have to eliminate those duplicate values from the dataset by excluding space values either from starting or ending of the string (for categorical sampeles only) 
@@ -23,6 +24,11 @@ for col in main_df.columns:
         indiv_val = elem_space(value)
         new_val.append(indiv_val)
     main_df[col] = new_val
+
+for col in col_data_dict.keys():
+    if col_data_dict[col]["type"] == "bool":
+       main_df[col] = main_df[col].map({True: "Yes", False: "No"})
+       print(main_df[col].dtype)
 
 main_df.to_csv("../outputs/data/space_preprocessed_main.csv",index=False)
 
