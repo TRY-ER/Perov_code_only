@@ -3,7 +3,6 @@ import numpy as np
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score,classification_report
 import optuna as opt
-import torch
 import os
 import joblib
 
