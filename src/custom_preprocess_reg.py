@@ -4,8 +4,8 @@ import joblib
 
 
 main_df = pd.read_csv("../inputs/smote_reg_reversed_df.csv")
-col_data = joblib.load("../inputs/columns_encoded/syn_data.z")
-col_data_dict = joblib.load("../deposition/col_data_pred.z")
+# col_data = joblib.load("../inputs/columns_encoded/syn_data.z")
+# col_data_dict = joblib.load("../deposition/col_data_pred.z")
 
 
 #we have to eliminate those duplicate values from the dataset by excluding space values either from starting or ending of the string (for categorical sampeles only) 
@@ -34,8 +34,8 @@ for col in col_data_dict.keys():
 
 main_df.to_csv("../outputs/data/space_preprocessed_main.csv",index=False)
 
-cat_cols = col_data["categorical"]
-tar_col = "PCE_categorical"
+# cat_cols = col_data["categorical"]
+# tar_col = "PCE_categorical"
 
 
 # using label encoding

@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import joblib
 from imblearn.over_sampling import SMOTENC
-from imblearn.over_sampling import SMOTE
 from sklearn.preprocessing import StandardScaler
 
 main_df = pd.read_csv("../inputs/unscaled_preprocessed_df.csv")
@@ -47,7 +46,7 @@ smote = SMOTENC(categorical_features=cat_col_int,
                 k_neighbors=3,
                 n_jobs=3)
 
-smote_reg = SMOTE(random_state=143)
+# smote_reg = SMOTE(random_state=143)
 
 
 # x_smoted, y_smoted = smote_reg.fit_resample(X,Y)
@@ -83,9 +82,10 @@ for col in decoded_df.columns:
         main_reversed_df[col] = lbl_enc.inverse_transform(main_reversed_df[col])
     except:pass
 
-main_reversed_df = main_reversed_df.drop(["PCE_categorical"],axis=1)
 print(main_reversed_df.shape)
 print(main_reversed_df.head())
+main_reversed_df.to_csv("../inputs/smote_reg_w_cat.csv",index=False)
+main_reversed_df = main_reversed_df.drop(["PCE_categorical"],axis=1)
 main_reversed_df.to_csv("../inputs/smote_reg_reversed_df.csv",index=False)
 print(main_reversed_df.tail())
 
