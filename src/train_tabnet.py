@@ -108,15 +108,6 @@ if __name__ == '__main__':
     model_name = "pytorch_tabnet"
     optimizer = "Adam"
     folds = 20
-    # clf = TabNetClassifier()
-    # y = use_df[tar_col]
-    # x = use_df.drop([tar_col],axis=1)
-    # X_train, X_test, Y_train, Y_test = train_test_split(x,y,test_size=0.2)
-    # clf.fit(X_train,Y_train)
-    # y_pred = clf.predict(X_test)
-    # accuracy_score = accuracy_score(y_pred, Y_test)
-    # print(accuracy_score) 
-    # print("[++] Starting the training process ...")
     train(model_name=model_name,
         sc_df=use_df,
         tar_col=tar_col,
